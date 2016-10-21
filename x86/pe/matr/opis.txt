@@ -1,0 +1,21 @@
+Program s³u¿y do obliczania iloczynu dwóch macierzy o wymiarach 4x4, do których dane wprowadza u¿ytkownik.
+Nastêpnie macierz wynikowa jest wyœwietlana w postaci sformatowanej.
+
+Program wykorzystuje format standardowy dla MS Windows: PE CONSOLE. Podstawow¹ ró¿nic¹ miêdzy formatem DOSowym a u¿ywanym przeze mnie jest podzia³ programu na sekcje, oraz mo¿liwoœæ do³¹czenia bibliotek. Nie u¿ywa siê przez to tutaj bezpoœrednio przerwañ.
+Program wykorzystuje tak¿e rejestry i zestaw instrukcji SSE (Streaming SIMD Extensions), które wprowadzone zosta³y do procesorów x86 przez Intela w roku 1999. 
+Rozmiar rejestrów SSE wynosi 128bit. Mieszcz¹ one kilka liczb: 2x64bit, 4x32bit, 8x16bit lub 16x8bit.
+W moim przypadku mieœciæ bêd¹ 4 liczby 32bit int ze znakiem.
+Dziêki temu, ¿e w jednym rejestrze przechowywane s¹ cztery liczby, mo¿liwe by³o mno¿enie przez siebie czterech par liczb w jednej instrukcji. U³atwi³o to bardzo napisanie programu licz¹cego iloczyn macierzy 4x4.
+
+Program korzysta tak¿e z pamiêci, która rezerwowana jest na dane wejœciowe, pomocnicze, tekstowe oraz wynik.
+
+Dane pierwszej macierzy wczytywane s¹ pêtl¹ 'loopa' za pomoc¹ funkcji 'scanf' z biblioteki 'msvcrt.dll'.
+Zapisywane s¹ one jako 32bit int ze znakiem do pamiêci, której adres pocz¹tkowy zawarty jest pod etykiet¹ 'm1w1'.
+
+Macierz druga wczytywana jest jako transponowana. Poszczególne elementy wpisuje siê w kolejnoœci w³aœciwej dla macierzy zwyk³ych, lecz zastosowane adresowanie sprawia, ¿e wype³niana jest ona w sposób transponowany. Typ danych jest taki jak w macierzy pierwszej. Adres pocz¹tkowy zawiera siê pod etykiet¹ 'm2k1'.
+
+Po wczytaniu macierze s¹ mno¿one. W adresowaniu pamiêci pomog³y rejestry eax, ebx, edx. Dane do mno¿enia wczytywane s¹ do rejestrów xmm_ po cztery komórki macierzy (wiersz i kolumna): xmm0 zawiera wiersze, xmm1 kolumny. Mno¿enie wykonuje siê za pomoc¹ instrukcji 'mulps xmm0, xmm1'. Jednak nie dzia³a ona prawid³owo na danych int ze znakiem. Nale¿a³o przed mno¿eniem zamieniæ liczby z signd int na float. Dopiero wtedy mo¿liwe by³o poprawne mno¿enie rejestrów. Po mno¿eniu wynik zamieniany by³ znowy na signed int a nastepnie zapisywany do pamieci - do macierzy pomocniczej. Po wymno¿eniu wszystkich wierszy i kolumn otrzymaliœmy w pamiêci 64 elementy, poszczególne czwórki tych elementów to sk³adniki dodawania przy wymna¿aniu wiersz x kolumna. Nale¿y je do siebie dodaæ i zapisaæ do macierzy wynikowej. W tym celu wykorzystana zosta³a pêtla 'loopz_'. Po zsumowaniu wszystkich czwórek otrzymaliœmy ci¹g 16 liczb, czyli poszczególnych komórek macierzy. Aby mo¿na by³o je wyœwietliæ, nale¿a³o wrzuciæ je na stos w odwroconej kolejnoœci, wrzucic na stos tekst wynikowy z miejscem na liczby ('%10i') a nastêpnie wywo³aæ funkcjê printf.
+
+Po wyœwietleniu wyniku program czeka na naciœniêcie klawisza. Po naciœniêciu czeka jeszcze dwie sekundy i zamyka siê.
+
+Bardziej szczegó³owy opis dzia³ania znajduje siê w komentarzach w kodzie programu.

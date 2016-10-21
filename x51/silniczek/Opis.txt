@@ -1,0 +1,23 @@
+Program ma za zadanie takie wysterowanie silnika aby wykonywal sekwencje 2 obrotow w prawo, krotkiej przerwy, oraz 3,5 obrotu w lewo. 
+Z racji tego, ze przy czestotliwosci odswiezania umozliwiajacej zaobserwowanie obrotow silnika, przerwa czterosekundowa trwala by zbyt dlugo, zostala ona zastapiona przerwa trwajaca 40 taktow zegara.
+
+Program opiera siê na obs³udze przerwañ wywo³ywanych przepe³nieniem licznika T0 lub T1.
+
+Konfigurowanie przerwania sk³ada siê z nastêpujacych kroków:
+	- ustawienie trybu licznika w rejestrze TMOD
+	- ustawienie wartosci poczatkowej licznika TL0 lub TL1, od której zlicza³ bêdzie a¿ do przepe³nienia (po wartosci maksymalnej dla 8bit - 255)
+	- w³aczenie licznika - ustawienie bitu TR0 lub TR1, licznik zwiêksza siê o jeden z ka¿dym taktem
+	- globalne w³aczenie przerwañ poprzez ustawienie bitu EA
+	- w³aczenie przerwania licznika T0 lub T1 poprzez ustawienie bitu, odpowiednio, ET0 lub ET1
+    - po przepe³nieniu licznika ustawiona zostaje flaga TF0 dla licznika T0 lub TF1 dla T1
+	- nastêpnie program przechodzi do miejsca w pamiêci pod adresem 000Bh dla T0 lub 001Bh dla T1 i zaczyna wykonywaæ instrukcje od tego miejsca
+	- w tym miejscu mo¿na wyzerowaæ flagê przepe³nienia i przejsæ do obs³ugi przerwania
+
+W programie u¿ywamy obu przerwañ, zarówno dla licznika T0 (realizuje obrót w lewo o 3,5 obrotu) jak i T1 (dwa obroty w prawo).
+
+Pierwsze przerwanie inicjowane jest z MAIN - przerwanie T0 realizujace 2 obroty w prawo. Nastêpnie wystêpuje zapêtlone wywo³ywanie przerwañ T1 i T0, aby program dzia³a³ bez przerwy.
+Jest to zrealizowane przez aktywowanie przerwania T0 w obsludze przerwania T1 i odwrotnie: przerwania T1 w obsludze przerwania T0.
+Pomiêdzy przerwaniami wywo³ywany jest podprogram BREAK, ktory realizuje bezczynnosc silnika przez czas 40 taktow oraz sygnalizuje bezczynnosæ wypisaniem litery 'b' na wyswietlaczu siedmiosegmentowym.
+
+Wartosci poczatkowe liczników T0 i T1 uwzglêdniaja czas tracony na wykonywaniu instrukcji pomiêdzy przepe³nieniem a zatrzymaniem/startem silnika - przerwania wywolywane sa odpowiednio szybciej, aby skompensowac opóznienie.
+
