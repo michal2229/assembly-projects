@@ -17,7 +17,7 @@ In DOS standard, the programmer is stuck with BIOS interrupts and other anachron
 
 
 
-Some of them I wrote for myslef, vast majority of them were written to teach others.
+Some of them I wrote for myself but vast majority of them I wrote to teach others.
 
 Repository tree:
 
