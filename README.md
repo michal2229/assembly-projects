@@ -13,7 +13,7 @@ x86 (or 8086) processor is fairly common, i wrote for it in DOS standard and in 
 In PE standard the programmer is allowed to use FPU, SSE and vector extensions, so it is easier to write precise and fast code. 
 It runs on 32bit processors - I had plans to write some 64bit assembly, but I did not realize it.
 
-In DOS standard, he is stuck with BIOS interrupts and other anachronisms, so it is not nice.
+In DOS standard, the programmer is stuck with BIOS interrupts and other anachronisms, so it is not nice.
 
 
 
