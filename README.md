@@ -4,13 +4,15 @@ My old university projects in assembly.
 
 I wrote them during my studies at Military University of Technology, Warsaw, Poland.
 
-Projects were written to two processor architectures: x86 (32bit) and x51 (8bit).
+Projects were written for two processor architectures: x86 (32bit) and x51 (8bit). 
+
+x86 projects are written in FASM (flat assembler), x51 projects are for EDSIM and MICROWIND DSCH software.
 
 x51 (or 8051) is basically microcontroller. Currently it is used in SIM cards and sometimes in industry.
 
 x86 (or 8086) processor is fairly common, i wrote for it in DOS standard and in PE standard (which is more interesting). 
 
-In PE standard the programmer is allowed to use FPU, SSE and vector extensions, so it is easier to write precise and fast code. 
+In PE standard the programmer is allowed to use FPU unit, SSE, MMX, AVX and other useful extensions, so it is easier to write precise and fast code. 
 It runs on 32bit processors - I had plans to write some 64bit assembly, but I did not realize it.
 
 In DOS standard, the programmer is stuck with BIOS interrupts and other anachronisms, so it is not nice.
